@@ -1,4 +1,4 @@
-### Hi there 👋
+###My name is Rafael Brandão but everybody call's me bran!
 
 <!--
 **RafaBran/rafaBran** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
