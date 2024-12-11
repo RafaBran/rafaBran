@@ -11,7 +11,7 @@ Sou desenvolvedor junior com grande paixão por tecnologia e atualmente estou me
 - **TypeScript**
 - **Bootstrap**
 - **PrimeNG**
-- 
+
 ### Back-End
 - **Java**
 - **Spring Boot**
