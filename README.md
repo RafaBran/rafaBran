@@ -1,10 +1,10 @@
-# 👋 Olá, Eu Sou Rafael Brandão!
+#  Rafael Brandão
 
-## 🌟 Sobre Mim
+## Sobre Mim
 
-Sou desenvolvedor junior com grande paixão por tecnologia e atualmente estou me formando para ser Desenvolvedor Full Stack. Tenho trabalhado com uma variedade de tecnologias que me permitem criar soluções eficientes e inovadoras para problemas complexos. 
+Sou desenvolvedor junior com grande interesse em soluções tecnológicas e atualmente estou me formando para ser Desenvolvedor Full Stack. Tenho trabalhado com uma variedade de tecnologias que me permitem criar soluções eficientes. 
 
-## 🚀 Tecnologias
+## Tecnologias
 
 ### Front-End
 - **Angular**
@@ -24,22 +24,23 @@ Sou desenvolvedor junior com grande paixão por tecnologia e atualmente estou me
 - Desenvolvimento de aplicações web baseadas em **Microserviços**
 - Utilização de **API RESTful**
 
-## 📫 Conecte-se Comigo
+## Conecte-se Comigo
 
 - [LinkedIn](https://www.linkedin.com/in/seu-perfil)
 
-## 💼 Ultimo projeto:
+##  Ultimo projeto:
 
-### 📚 Sistema de Gerenciamento de Biblioteca (SGB)
-Uma aplicação web que facilita a gestão de livros, autores e categorias. Utilizando Angular, PrimeNG e Spring Boot, o SGB permite operações de CRUD de forma intuitiva e segura, garantindo a integridade dos dados.
+### LAECUnialfa
+Um site e aplicação web que permite a visualização de informações pertinentes à disciplina de análise do comportamento básica, e também o gerenciamento de informações atinentes às aulas.
+O projeto ainda está em desenvolvimento, mas já conta com os primeiros recursos de segurança com autenticação JWT, e algumas requidições (CRUD), para as entidades criatas até então.
 
-[Ver Projeto](https://github.com/RafaBran/backEnd-SGB)
+[Ver Projeto]([https://github.com/RafaBran/backEnd-SGB](https://github.com/RafaBran/UI-laecUNIALFA)) (https://github.com/RafaBran/api-common-laecUNIALFA).
 
 ---
 
-🎓 Atualmente me dedicando ao aprendizado contínuo e sempre buscando novos desafios e oportunidades de crescimento.
+Atualmente me dedicando ao aprendizado contínuo e sempre buscando novos desafios e oportunidades de crescimento.
 
-💬 Fique à vontade para entrar em contato e discutir sobre tecnologia, projetos ou qualquer outra coisa!
+Fique à vontade para entrar em contato e discutir sobre tecnologia, projetos ou qualquer outra coisa!
 
 ---
 
