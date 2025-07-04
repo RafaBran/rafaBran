@@ -36,8 +36,8 @@ O projeto ainda está em desenvolvimento, mas já conta com os primeiros recurso
 
 **Ver Projeto:**
 
-- [API (Back-end)](https://github.com/RafaBran/api-common-laecUNIALFA)  
-#- [UI (Front-end)](https://github.com/RafaBran/UI-laecUNIALFA)
+## [API (Back-end)](https://github.com/RafaBran/api-common-laecUNIALFA)  
+## [UI (Front-end)](https://github.com/RafaBran/UI-laecUNIALFA)
 ---
 
 Atualmente me dedicando ao aprendizado contínuo e sempre buscando novos desafios e oportunidades de crescimento.
