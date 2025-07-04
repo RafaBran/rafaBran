@@ -34,8 +34,10 @@ Sou desenvolvedor junior com grande interesse em soluções tecnológicas e atua
 Um site e aplicação web que permite a visualização de informações pertinentes à disciplina de análise do comportamento básica, e também o gerenciamento de informações atinentes às aulas.
 O projeto ainda está em desenvolvimento, mas já conta com os primeiros recursos de segurança com autenticação JWT, e algumas requidições (CRUD), para as entidades criatas até então.
 
-Back-end (API Common): https://github.com/RafaBran/api-common-laecUNIALFA
-Front-end (UI): https://github.com/RafaBran/UI-laecUNIALFA
+**Ver Projeto:**
+
+- [API (Back-end)](https://github.com/RafaBran/api-common-laecUNIALFA)  
+- [UI (Front-end)](https://github.com/RafaBran/UI-laecUNIALFA)
 ---
 
 Atualmente me dedicando ao aprendizado contínuo e sempre buscando novos desafios e oportunidades de crescimento.
