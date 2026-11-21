@@ -1,39 +1,29 @@
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/banner-dark.svg">
-  <img alt="Rafael Brandão, biólogo e desenvolvedor Java" src="assets/banner-light.svg" width="100%">
-</picture>
+<img src="assets/banner.svg" alt="Rafael Brandão, desenvolvedor Java júnior na Memora" width="100%">
 
-Sou biólogo e desenvolvedor. Hoje trabalho como dev júnior na **Memora**, em
-sistemas Java para o governo do estado, depois de um ano de estágio na mesma
-empresa. Sou formado em Análise e Desenvolvimento de Sistemas pela UNIALFA e
-moro em Goiânia.
+<br>
 
-A biologia me deixou o hábito de olhar para sistemas como organismos: partes
-que se comunicam, dependem umas das outras e precisam continuar funcionando
-quando o ambiente muda.
+Desenvolvedor Java júnior na **Memora**, onde trabalho em sistemas para o governo
+do estado. Entrei como estagiário e fui efetivado depois de um ano. Sou formado em
+Biologia e em Análise e Desenvolvimento de Sistemas pela UNIALFA, e moro em Goiânia.
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/filogenia-dark.svg">
-  <img alt="Cladograma da stack: Java, Spring Boot, APIs REST, microsserviços, JWT, TypeScript, Angular, PrimeNG, Bootstrap, SCSS, PostgreSQL, Oracle e MySQL" src="assets/filogenia-light.svg" width="100%">
-</picture>
+<br>
 
-## Projetos
+<img src="assets/stack.svg" alt="Stack: Java, Spring Boot, Angular, TypeScript, PostgreSQL, Oracle, MySQL, APIs REST, microsserviços, JWT, PrimeNG, Bootstrap, SCSS e Git" width="100%">
 
-**[LAEC](https://github.com/RafaBran/laec)**: sistema de gerenciamento e
-agendamento do Laboratório de Análise Experimental do Comportamento da
-UNIALFA. Back-end em microsserviços (autenticação, usuários, laboratório e
-gateway) com Spring Boot e PostgreSQL, front-end em Angular.
+<br>
 
-**[Calculadora de Notas UNIALFA](https://github.com/RafaBran/calculadora-UNIALFA)**:
-simulador das notas N1 a N4 conforme a Resolução 063/2023. Mostra a situação
-do aluno e quanto falta em cada etapa. Angular e TypeScript, com as regras de
-avaliação em funções puras cobertas por testes.
+<a href="https://github.com/RafaBran/laec"><img src="assets/card-laec.svg" alt="LAEC: sistema de agendamento do laboratório da UNIALFA" width="49%"></a>
+<a href="https://github.com/RafaBran/calculadora-UNIALFA"><img src="assets/card-calculadora.svg" alt="Calculadora de notas UNIALFA" width="49%"></a>
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/RafaBran/rafaBran/output/petri-dark.svg">
-  <img alt="Placa de Petri gerada a partir das contribuições do último ano" src="https://raw.githubusercontent.com/RafaBran/rafaBran/output/petri-light.svg" width="100%">
-</picture>
+<br><br>
 
-## Contato
+<img src="https://raw.githubusercontent.com/RafaBran/rafaBran/output/atividade.svg" alt="Atividade no GitHub nos últimos 12 meses" width="100%">
 
-[branhub.vercel.app](https://branhub.vercel.app) · [X @BrandRFL](https://x.com/BrandRFL)
+<br>
+
+<p align="center">
+  <a href="https://branhub.vercel.app">branhub.vercel.app</a> ·
+  <a href="https://x.com/BrandRFL">X @BrandRFL</a>
+</p>
+
+<img src="assets/footer.svg" alt="" width="100%">

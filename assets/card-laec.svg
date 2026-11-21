@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 590 300" width="590" height="300" role="img" aria-label="Projeto LAEC">
+<defs>
+  <linearGradient id="border" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#8b5cf6"/><stop offset=".5" stop-color="#22d3ee"/><stop offset="1" stop-color="#8b5cf6"/>
+    <animateTransform attributeName="gradientTransform" type="rotate" values="0 .5 .5;360 .5 .5" dur="8s" repeatCount="indefinite"/>
+  </linearGradient>
+  <linearGradient id="sheen" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".09"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+  <filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="40"/></filter>
+  <clipPath id="frame"><rect x="2" y="2" width="586" height="296" rx="20"/></clipPath>
+</defs>
+<style>
+  .sheen{animation:sweep 5s ease-in-out infinite;animation-delay:0.0s}
+  @keyframes sweep{0%{transform:translateX(-300px) skewX(-20deg)}60%,100%{transform:translateX(690px) skewX(-20deg)}}
+  .orb{animation:float 9s ease-in-out infinite alternate}
+  @keyframes float{to{transform:translate(-60px,40px)}}
+</style>
+<rect x="1" y="1" width="588" height="298" rx="21" fill="url(#border)"/>
+<g clip-path="url(#frame)">
+  <rect width="590" height="300" fill="#070b18"/>
+  <circle class="orb" cx="530" cy="40" r="110" fill="#8b5cf6" opacity=".35" filter="url(#blur)"/>
+  <text x="36" y="62" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="15" fill="#22d3ee">01 / projeto</text>
+  <text x="36" y="108" font-family="'Segoe UI', -apple-system, Helvetica, Arial, sans-serif" font-size="34" font-weight="800" fill="#f1f5f9">LAEC</text>
+  <text x="36" y="148" font-family="'Segoe UI', -apple-system, Helvetica, Arial, sans-serif" font-size="17" fill="#94a3b8">Gerenciamento e agendamento do Laboratório de</text><text x="36" y="174" font-family="'Segoe UI', -apple-system, Helvetica, Arial, sans-serif" font-size="17" fill="#94a3b8">Análise Experimental do Comportamento da UNIALFA.</text><text x="36" y="200" font-family="'Segoe UI', -apple-system, Helvetica, Arial, sans-serif" font-size="17" fill="#94a3b8">Back-end em microsserviços com gateway e auth.</text>
+  <rect x="36" y="244" width="118" height="30" rx="15" fill="#ffffff" fill-opacity=".06" stroke="#ffffff" stroke-opacity=".14"/><text x="49" y="264" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="13.5" fill="#f1f5f9">Spring Boot</text><rect x="164" y="244" width="110" height="30" rx="15" fill="#ffffff" fill-opacity=".06" stroke="#ffffff" stroke-opacity=".14"/><text x="177" y="264" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="13.5" fill="#f1f5f9">PostgreSQL</text><rect x="284" y="244" width="85" height="30" rx="15" fill="#ffffff" fill-opacity=".06" stroke="#ffffff" stroke-opacity=".14"/><text x="297" y="264" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="13.5" fill="#f1f5f9">Angular</text><rect x="379" y="244" width="51" height="30" rx="15" fill="#ffffff" fill-opacity=".06" stroke="#ffffff" stroke-opacity=".14"/><text x="392" y="264" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="13.5" fill="#f1f5f9">JWT</text>
+  <text x="554" y="108" text-anchor="end" font-family="'Segoe UI', -apple-system, Helvetica, Arial, sans-serif" font-size="28" fill="#f1f5f9" opacity=".7">↗</text>
+  <rect class="sheen" x="0" y="0" width="160" height="300" fill="url(#sheen)"/>
+</g>
+</svg>

@@ -1,146 +1,226 @@
-"""Gera os SVGs estáticos do perfil: banner com dupla hélice e cladograma da stack."""
-import math, os
+"""Gera os SVGs animados do perfil (banner, faixa de stack, cards e rodapé)."""
+import os, html
 
 OUT = os.path.join(os.path.dirname(__file__), "..", "assets")
+os.makedirs(OUT, exist_ok=True)
 
-THEMES = {
-    "dark": dict(bg="#0d1117", fg="#e6edf3", muted="#8b949e", a="#3fb950", b="#58a6ff",
-                 pair=["#3fb950", "#58a6ff", "#d2a8ff", "#f0883e"], line="#30363d"),
-    "light": dict(bg="#ffffff", fg="#1f2328", muted="#59636e", a="#1a7f37", b="#0969da",
-                  pair=["#1a7f37", "#0969da", "#8250df", "#bc4c00"], line="#d0d7de"),
-}
-SANS = "-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
+BG = "#070b18"
+VIOLET, CYAN, EMERALD, PINK = "#8b5cf6", "#22d3ee", "#34d399", "#f472b6"
+FG, MUTED = "#f1f5f9", "#94a3b8"
+SANS = "'Segoe UI', -apple-system, Helvetica, Arial, sans-serif"
 MONO = "ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace"
 
 
-def banner(t):
-    W, H = 900, 240
-    cy, A = 120, 62
-    n, x0, dx = 22, 36, 18
-    period = 3.2
+def save(name, svg):
+    with open(os.path.join(OUT, name), "w", encoding="utf-8") as f:
+        f.write(svg)
+
+
+def wave_path(w, h, amp, base, wl):
+    """Onda senoidal (aprox. por curvas) com largura 2*w para loop contínuo."""
+    d = f"M0,{base}"
+    x = 0
+    up = True
+    while x < 2 * w:
+        cx = x + wl / 2
+        cy = base - amp if up else base + amp
+        d += f" Q{cx},{cy} {x + wl},{base}"
+        x += wl
+        up = not up
+    return d + f" V{h} H0 Z"
+
+
+def banner():
+    W, H = 1200, 420
+    phrases = [
+        "Desenvolvedor Java júnior @ Memora",
+        "Spring Boot · Angular · PostgreSQL",
+        "Sistemas para o governo do estado",
+    ]
+    fs, cw = 26, 26 * 0.6
+    per, T = 5.0, 5.0 * len(phrases)
+    ty = 262
+    type_css, type_el = [], []
+    for k, p in enumerate(phrases):
+        n = len(p)
+        full = n * cw
+        s = k * per / T * 100
+        a = (k * per + 1.6) / T * 100   # terminou de digitar
+        b = (k * per + 3.9) / T * 100   # começa a apagar
+        e = (k * per + 4.6) / T * 100   # apagou
+        x0 = (W - full) / 2
+        def kf(prop, top):
+            pts = [(0, 0), (s, 0), (a, top), (b, top), (e, 0), (100, 0)]
+            if s == 0:
+                pts = pts[1:]
+            return " ".join(f"{pc:.3f}%{{{prop.format(v=v)}}}" for pc, v in pts)
+        type_css.append(f"@keyframes w{k}{{{kf('transform:scaleX({v})', 1)}}}")
+        type_css.append(f"@keyframes c{k}{{{kf('transform:translateX({v:.1f}px)', full)}}}")
+        if s > 0:
+            type_css.append(f"@keyframes o{k}{{0%,{s-0.01:.3f}%{{opacity:0}}{s:.3f}%,{e+0.6:.3f}%{{opacity:1}}{e+0.61:.3f}%,100%{{opacity:0}}}}")
+        else:
+            type_css.append(f"@keyframes o{k}{{0%,{e+0.6:.3f}%{{opacity:1}}{e+0.61:.3f}%,100%{{opacity:0}}}}")
+        type_el.append(f'''
+  <clipPath id="clip{k}"><rect x="{x0:.1f}" y="{ty-30}" height="44" width="{full+4:.1f}" style="transform-box:fill-box;transform-origin:left;transform:scaleX(0);animation:w{k} {T}s steps({n}) infinite"/></clipPath>
+  <g style="animation:o{k} {T}s linear infinite">
+    <text x="{x0:.1f}" y="{ty}" clip-path="url(#clip{k})" font-family="{MONO}" font-size="{fs}" fill="{FG}">{html.escape(p)}</text>
+    <rect x="{x0+3:.1f}" y="{ty-24}" width="3" height="30" fill="{CYAN}" style="animation:c{k} {T}s steps({n}) infinite, blink 1s steps(1) infinite"/>
+  </g>''')
+
+    waves = []
+    for i, (amp, base, wl, col, op, dur) in enumerate([
+        (18, 345, 300, VIOLET, .28, 16), (14, 362, 240, CYAN, .2, 11), (10, 380, 200, EMERALD, .16, 8)]):
+        waves.append(f'<path d="{wave_path(W, H, amp, base, wl)}" fill="{col}" opacity="{op}">'
+                     f'<animateTransform attributeName="transform" type="translate" from="0 0" to="-{wl*2*(W//(wl*2))} 0" dur="{dur}s" repeatCount="indefinite"/></path>')
+    # partículas
+    import random
+    rnd = random.Random(7)
     parts = []
-    for i in range(n):
-        x = x0 + i * dx
-        delay = -(i * 0.28)
-        color = t["pair"][i % 4]
-        parts.append(
-            f'<line class="rung" x1="{x}" y1="{cy-A}" x2="{x}" y2="{cy+A}" stroke="{color}" '
-            f'style="animation-delay:{delay:.2f}s"/>'
-            f'<circle class="top" cx="{x}" cy="{cy}" r="5" fill="{t["a"]}" style="animation-delay:{delay:.2f}s"/>'
-            f'<circle class="bot" cx="{x}" cy="{cy}" r="5" fill="{t["b"]}" style="animation-delay:{delay:.2f}s"/>'
-        )
-    tx = 470
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-label="Rafael Brandão, biólogo e desenvolvedor">
+    for _ in range(46):
+        x, y = rnd.uniform(0, W), rnd.uniform(40, 360)
+        r = rnd.uniform(.8, 2.2)
+        d = rnd.uniform(6, 14)
+        dl = -rnd.uniform(0, d)
+        col = rnd.choice([FG, CYAN, VIOLET])
+        parts.append(f'<circle cx="{x:.0f}" cy="{y:.0f}" r="{r:.1f}" fill="{col}" class="p" style="animation-duration:{d:.1f}s;animation-delay:{dl:.1f}s"/>')
+
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-label="Rafael Brandão, desenvolvedor Java">
+<defs>
+  <linearGradient id="nameb" x1="0" x2="1" gradientUnits="objectBoundingBox" spreadMethod="repeat">
+    <stop offset="0" stop-color="{CYAN}"/><stop offset=".33" stop-color="{VIOLET}"/><stop offset=".66" stop-color="{PINK}"/><stop offset="1" stop-color="{CYAN}"/>
+    <animateTransform attributeName="gradientTransform" type="translate" values="0 0;1 0" dur="6s" repeatCount="indefinite"/>
+  </linearGradient>
+  <filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="60"/></filter>
+  <filter id="glow" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="14"/></filter>
+  <radialGradient id="vig" cx=".5" cy=".45" r=".75"><stop offset=".6" stop-color="{BG}" stop-opacity="0"/><stop offset="1" stop-color="{BG}" stop-opacity=".9"/></radialGradient>
+  <clipPath id="frame"><rect width="{W}" height="{H}" rx="22"/></clipPath>
+</defs>
 <style>
-  .rung,.top,.bot{{animation-duration:{period}s;animation-iteration-count:infinite;animation-direction:alternate;animation-timing-function:ease-in-out;transform-box:fill-box}}
-  .rung{{stroke-width:2.2;stroke-linecap:round;opacity:.55;transform-origin:center;animation-name:flip}}
-  .top{{animation-name:up}} .bot{{animation-name:down}}
-  @keyframes flip{{from{{transform:scaleY(1)}}to{{transform:scaleY(-1)}}}}
-  @keyframes up{{from{{transform:translateY(-{A}px)}}to{{transform:translateY({A}px)}}}}
-  @keyframes down{{from{{transform:translateY({A}px)}}to{{transform:translateY(-{A}px)}}}}
-  .cursor{{animation:blink 1.1s steps(1) infinite}}
+  .blob{{animation:drift 18s ease-in-out infinite alternate}}
+  .b2{{animation-duration:23s;animation-direction:alternate-reverse}}
+  .b3{{animation-duration:29s}}
+  @keyframes drift{{0%{{transform:translate(0,0) scale(1)}}50%{{transform:translate(160px,40px) scale(1.25)}}100%{{transform:translate(-120px,-30px) scale(.9)}}}}
+  .p{{animation-name:rise;animation-timing-function:linear;animation-iteration-count:infinite}}
+  @keyframes rise{{0%{{transform:translateY(40px);opacity:0}}20%{{opacity:.8}}80%{{opacity:.5}}100%{{transform:translateY(-120px);opacity:0}}}}
   @keyframes blink{{50%{{opacity:0}}}}
+  .reveal{{animation:reveal 1.6s cubic-bezier(.2,.7,.2,1) both}}
+  @keyframes reveal{{from{{opacity:0;transform:translateY(24px);letter-spacing:22px}}to{{opacity:1;transform:none}}}}
+  {"".join(type_css)}
 </style>
-<rect width="{W}" height="{H}" rx="14" fill="{t["bg"]}"/>
-{''.join(parts)}
-<text x="{tx}" y="96" font-family="{SANS}" font-size="40" font-weight="700" fill="{t["fg"]}">Rafael Brandão</text>
-<text x="{tx}" y="132" font-family="{SANS}" font-size="19" fill="{t["muted"]}">Biólogo · Desenvolvedor Java</text>
-<text x="{tx}" y="178" font-family="{MONO}" font-size="15" fill="{t["a"]}">ATG<tspan fill="{t["muted"]}"> // todo gene começa aqui</tspan></text>
-<text x="{tx}" y="202" font-family="{MONO}" font-size="15" fill="{t["b"]}">main()<tspan fill="{t["muted"]}"> // todo programa também</tspan><tspan class="cursor" fill="{t["fg"]}">▍</tspan></text>
+<g clip-path="url(#frame)">
+  <rect width="{W}" height="{H}" fill="{BG}"/>
+  <g filter="url(#blur)" opacity=".85">
+    <circle class="blob" cx="260" cy="140" r="170" fill="{VIOLET}"/>
+    <circle class="blob b2" cx="900" cy="120" r="160" fill="{CYAN}" opacity=".7"/>
+    <circle class="blob b3" cx="620" cy="330" r="150" fill="{PINK}" opacity=".45"/>
+  </g>
+  {"".join(parts)}
+  {"".join(waves)}
+  <rect width="{W}" height="{H}" fill="url(#vig)"/>
+  <g class="reveal" style="transform-box:fill-box;transform-origin:center">
+    <text x="{W/2}" y="186" text-anchor="middle" font-family="{SANS}" font-size="86" font-weight="800" letter-spacing="6" fill="url(#nameb)" filter="url(#glow)" opacity=".55">RAFAEL BRANDÃO</text>
+    <text x="{W/2}" y="186" text-anchor="middle" font-family="{SANS}" font-size="86" font-weight="800" letter-spacing="6" fill="url(#nameb)">RAFAEL BRANDÃO</text>
+  </g>
+  {"".join(type_el)}
+  <rect width="{W}" height="{H}" rx="22" fill="none" stroke="#ffffff" stroke-opacity=".08"/>
+</g>
 </svg>'''
 
 
-# Árvore: (rótulo, grupo, filhos)
-TREE = ("", None, [
-    ("Back-end", 0, [
-        ("Java", 0, [
-            ("Spring Boot", 0, [
-                ("APIs REST", 0, []),
-                ("Microsserviços", 0, []),
-                ("Autenticação JWT", 0, []),
-            ]),
-        ]),
-    ]),
-    ("Front-end", 1, [
-        ("TypeScript", 1, [
-            ("Angular", 1, [
-                ("PrimeNG", 1, []),
-                ("Bootstrap", 1, []),
-            ]),
-        ]),
-        ("SCSS", 1, []),
-    ]),
-    ("Dados", 2, [
-        ("SQL", 2, [
-            ("PostgreSQL", 2, []),
-            ("Oracle", 2, []),
-            ("MySQL", 2, []),
-        ]),
-    ]),
-])
+STACK = ["Java", "Spring Boot", "Angular", "TypeScript", "PostgreSQL", "Oracle", "MySQL",
+         "APIs REST", "Microsserviços", "JWT", "PrimeNG", "Bootstrap", "SCSS", "Git"]
 
 
-def cladogram(t):
-    W, H = 900, 420
-    top, row = 78, 38
-    x_root, step = 40, 150
-    colors = [t["a"], t["b"], t["pair"][3]]
-    els, labels = [], []
-    counter = [0]
-    seg = [0]
+def stack():
+    W, H = 1200, 96
+    cols = [VIOLET, CYAN, EMERALD, PINK]
+    x, pills = 0, []
+    for i, s in enumerate(STACK):
+        w = len(s) * 10.2 + 52
+        c = cols[i % 4]
+        pills.append(
+            f'<g transform="translate({x:.0f},26)"><rect width="{w:.0f}" height="44" rx="22" fill="{c}" fill-opacity=".12" stroke="{c}" stroke-opacity=".55"/>'
+            f'<circle cx="22" cy="22" r="5" fill="{c}"/><text x="36" y="28.5" font-family="{SANS}" font-size="17" font-weight="600" fill="{FG}">{s}</text></g>')
+        x += w + 14
+    span = x
+    row = "".join(pills)
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-label="Stack: {', '.join(STACK)}">
+<defs>
+  <linearGradient id="fade" x1="0" x2="1"><stop offset="0" stop-color="{BG}"/><stop offset=".08" stop-color="{BG}" stop-opacity="0"/><stop offset=".92" stop-color="{BG}" stop-opacity="0"/><stop offset="1" stop-color="{BG}"/></linearGradient>
+  <clipPath id="frame"><rect width="{W}" height="{H}" rx="22"/></clipPath>
+</defs>
+<style>.track{{animation:scroll {span/55:.1f}s linear infinite}} @keyframes scroll{{to{{transform:translateX(-{span:.0f}px)}}}}</style>
+<g clip-path="url(#frame)">
+  <rect width="{W}" height="{H}" fill="{BG}"/>
+  <g class="track"><g>{row}</g><g transform="translate({span:.0f},0)">{row}</g></g>
+  <rect width="{W}" height="{H}" fill="url(#fade)"/>
+  <rect width="{W}" height="{H}" rx="22" fill="none" stroke="#ffffff" stroke-opacity=".08"/>
+</g>
+</svg>'''
 
-    def layout(node, depth):
-        label, g, kids = node
-        x = x_root + depth * step
-        if not kids:
-            y = top + counter[0] * row
-            counter[0] += 1
-            return x, y
-        pos = [layout(k, depth + 1) for k in kids]
-        y = sum(p[1] for p in pos) / len(pos)
-        for (cx, cy_), k in zip(pos, kids):
-            c = colors[k[1]]
-            d = f"M{x},{y:.1f} V{cy_:.1f} H{cx}" if not k[2] else f"M{x},{y:.1f} V{cy_:.1f} H{cx}"
-            # folhas estendem o ramo até a coluna final
-            if not k[2]:
-                d = f"M{x},{y:.1f} V{cy_:.1f} H{x_root + 4*step}"
-            delay = 0.12 * seg[0]
-            seg[0] += 1
-            els.append(f'<path d="{d}" stroke="{c}" pathLength="1" class="br" style="animation-delay:{delay:.2f}s"/>')
-            if k[2]:
-                labels.append(f'<text x="{cx - 8}" y="{cy_ - 8:.1f}" text-anchor="end" class="node" fill="{c}" style="animation-delay:{delay+0.4:.2f}s">{k[0]}</text>')
-                els.append(f'<circle cx="{cx}" cy="{cy_:.1f}" r="3.5" fill="{c}" class="dot" style="animation-delay:{delay+0.4:.2f}s"/>')
-            else:
-                lx = x_root + 4 * step
-                labels.append(f'<circle cx="{lx}" cy="{cy_:.1f}" r="5" fill="{c}" class="dot" style="animation-delay:{delay+0.4:.2f}s"/>')
-                labels.append(f'<text x="{lx + 14}" y="{cy_ + 5:.1f}" class="leaf" fill="{t["fg"]}" style="animation-delay:{delay+0.4:.2f}s">{k[0]}</text>')
-        return x, y
 
-    _, ry = layout(TREE, 0)
-    els.insert(0, f'<circle cx="{x_root}" cy="{ry:.1f}" r="5" fill="{t["muted"]}"/>')
-    legend = "".join(
-        f'<circle cx="{560 + i*110}" cy="36" r="5" fill="{colors[i]}"/>'
-        f'<text x="{574 + i*110}" y="41" class="leg" fill="{t["muted"]}">{n}</text>'
-        for i, n in enumerate(["Back-end", "Front-end", "Dados"]))
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-label="Cladograma da stack de tecnologias">
+def card(idx, title, lines, tags, c1, c2):
+    W, H = 590, 300
+    body = "".join(f'<text x="36" y="{148 + i*26}" font-family="{SANS}" font-size="17" fill="{MUTED}">{html.escape(l)}</text>' for i, l in enumerate(lines))
+    x, chips = 36, []
+    for t in tags:
+        w = len(t) * 8.4 + 26
+        chips.append(f'<rect x="{x:.0f}" y="244" width="{w:.0f}" height="30" rx="15" fill="#ffffff" fill-opacity=".06" stroke="#ffffff" stroke-opacity=".14"/>'
+                     f'<text x="{x+13:.0f}" y="264" font-family="{MONO}" font-size="13.5" fill="{FG}">{t}</text>')
+        x += w + 10
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-label="Projeto {html.escape(title)}">
+<defs>
+  <linearGradient id="border" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="{c1}"/><stop offset=".5" stop-color="{c2}"/><stop offset="1" stop-color="{c1}"/>
+    <animateTransform attributeName="gradientTransform" type="rotate" values="0 .5 .5;360 .5 .5" dur="8s" repeatCount="indefinite"/>
+  </linearGradient>
+  <linearGradient id="sheen" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".09"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+  <filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="40"/></filter>
+  <clipPath id="frame"><rect x="2" y="2" width="{W-4}" height="{H-4}" rx="20"/></clipPath>
+</defs>
 <style>
-  .br{{fill:none;stroke-width:2.4;stroke-linecap:round}}
-  .leaf{{font:500 16px {SANS}}} .node{{font:600 13px {MONO}}} .leg{{font:14px {SANS}}}
-  @keyframes grow{{to{{stroke-dashoffset:0}}}}
-  @keyframes show{{to{{opacity:1}}}}
+  .sheen{{animation:sweep 5s ease-in-out infinite;animation-delay:{idx*1.4}s}}
+  @keyframes sweep{{0%{{transform:translateX(-300px) skewX(-20deg)}}60%,100%{{transform:translateX({W+100}px) skewX(-20deg)}}}}
+  .orb{{animation:float 9s ease-in-out infinite alternate}}
+  @keyframes float{{to{{transform:translate(-60px,40px)}}}}
 </style>
-<rect width="{W}" height="{H}" rx="14" fill="{t["bg"]}"/>
-<text x="{x_root}" y="40" font-family="{SANS}" font-size="20" font-weight="700" fill="{t["fg"]}">Filogenia da stack</text>
-<text x="{x_root}" y="62" font-family="{SANS}" font-size="14" fill="{t["muted"]}">cladograma das tecnologias que uso, do ancestral comum às folhas</text>
-{''.join(els)}
-{''.join(labels)}
-{legend}
+<rect x="1" y="1" width="{W-2}" height="{H-2}" rx="21" fill="url(#border)"/>
+<g clip-path="url(#frame)">
+  <rect width="{W}" height="{H}" fill="{BG}"/>
+  <circle class="orb" cx="{W-60}" cy="40" r="110" fill="{c1}" opacity=".35" filter="url(#blur)"/>
+  <text x="36" y="62" font-family="{MONO}" font-size="15" fill="{c2}">0{idx+1} / projeto</text>
+  <text x="36" y="108" font-family="{SANS}" font-size="34" font-weight="800" fill="{FG}">{html.escape(title)}</text>
+  {body}
+  {"".join(chips)}
+  <text x="{W-36}" y="108" text-anchor="end" font-family="{SANS}" font-size="28" fill="{FG}" opacity=".7">↗</text>
+  <rect class="sheen" x="0" y="0" width="160" height="{H}" fill="url(#sheen)"/>
+</g>
 </svg>'''
 
 
-for name, t in THEMES.items():
-    with open(os.path.join(OUT, f"banner-{name}.svg"), "w", encoding="utf-8") as f:
-        f.write(banner(t))
-    with open(os.path.join(OUT, f"filogenia-{name}.svg"), "w", encoding="utf-8") as f:
-        f.write(cladogram(t))
+def footer():
+    W, H = 1200, 120
+    waves = []
+    for amp, base, wl, col, op, dur in [(14, 50, 300, VIOLET, .28, 14), (10, 66, 240, CYAN, .2, 10), (8, 84, 200, EMERALD, .16, 7)]:
+        waves.append(f'<path d="{wave_path(W, H, amp, base, wl)}" fill="{col}" opacity="{op}">'
+                     f'<animateTransform attributeName="transform" type="translate" from="0 0" to="-{wl*2*(W//(wl*2))} 0" dur="{dur}s" repeatCount="indefinite"/></path>')
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}">
+<defs><clipPath id="frame"><rect width="{W}" height="{H}" rx="22"/></clipPath></defs>
+<g clip-path="url(#frame)"><rect width="{W}" height="{H}" fill="{BG}"/>{"".join(waves)}</g>
+</svg>'''
+
+
+save("banner.svg", banner())
+save("stack.svg", stack())
+save("card-laec.svg", card(0, "LAEC",
+    ["Gerenciamento e agendamento do Laboratório de",
+     "Análise Experimental do Comportamento da UNIALFA.",
+     "Back-end em microsserviços com gateway e auth."],
+    ["Spring Boot", "PostgreSQL", "Angular", "JWT"], VIOLET, CYAN))
+save("card-calculadora.svg", card(1, "Calculadora UNIALFA",
+    ["Simulador das notas N1 a N4 conforme a",
+     "Resolução 063/2023: mostra a situação do aluno",
+     "e quanto falta tirar em cada etapa."],
+    ["Angular", "TypeScript", "Testes"], CYAN, EMERALD))
+save("footer.svg", footer())
 print("ok")
