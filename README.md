@@ -1,49 +1,39 @@
-#  Rafael Brandão
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/banner-dark.svg">
+  <img alt="Rafael Brandão, biólogo e desenvolvedor Java" src="assets/banner-light.svg" width="100%">
+</picture>
 
-## Sobre Mim
+Sou biólogo e desenvolvedor. Hoje trabalho como dev júnior na **Memora**, em
+sistemas Java para o governo do estado, depois de um ano de estágio na mesma
+empresa. Sou formado em Análise e Desenvolvimento de Sistemas pela UNIALFA e
+moro em Goiânia.
 
-Sou desenvolvedor junior com grande interesse em soluções tecnológicas e atualmente estou me formando para ser Desenvolvedor Full Stack. Tenho trabalhado com uma variedade de tecnologias que me permitem criar soluções eficientes. 
+A biologia me deixou o hábito de olhar para sistemas como organismos: partes
+que se comunicam, dependem umas das outras e precisam continuar funcionando
+quando o ambiente muda.
 
-## Tecnologias
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/filogenia-dark.svg">
+  <img alt="Cladograma da stack: Java, Spring Boot, APIs REST, microsserviços, JWT, TypeScript, Angular, PrimeNG, Bootstrap, SCSS, PostgreSQL, Oracle e MySQL" src="assets/filogenia-light.svg" width="100%">
+</picture>
 
-### Front-End
-- **Angular**
-- **TypeScript**
-- **Bootstrap**
-- **PrimeNG**
+## Projetos
 
-### Back-End
-- **Java**
-- **Spring Boot**
+**[LAEC](https://github.com/RafaBran/laec)**: sistema de gerenciamento e
+agendamento do Laboratório de Análise Experimental do Comportamento da
+UNIALFA. Back-end em microsserviços (autenticação, usuários, laboratório e
+gateway) com Spring Boot e PostgreSQL, front-end em Angular.
 
-### Banco de Dados
-- **Oracle db**
-- **MySQL**
+**[Calculadora de Notas UNIALFA](https://github.com/RafaBran/calculadora-UNIALFA)**:
+simulador das notas N1 a N4 conforme a Resolução 063/2023. Mostra a situação
+do aluno e quanto falta em cada etapa. Angular e TypeScript, com as regras de
+avaliação em funções puras cobertas por testes.
 
-### Outras Habilidades
-- Desenvolvimento de aplicações web baseadas em **Microserviços**
-- Utilização de **API RESTful**
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/RafaBran/rafaBran/output/petri-dark.svg">
+  <img alt="Placa de Petri gerada a partir das contribuições do último ano" src="https://raw.githubusercontent.com/RafaBran/rafaBran/output/petri-light.svg" width="100%">
+</picture>
 
-## Conecte-se Comigo
+## Contato
 
-- [LinkedIn](https://www.linkedin.com/in/seu-perfil)
-
-##  Ultimo projeto:
-
-### LAECUnialfa
-Um site e aplicação web que permite a visualização de informações pertinentes à disciplina de análise do comportamento básica, e também o gerenciamento de informações atinentes às aulas.
-O projeto ainda está em desenvolvimento, mas já conta com os primeiros recursos de segurança com autenticação JWT, e algumas requidições (CRUD), para as entidades criatas até então.
-
-**Ver Projeto:**
-
-## [API (Back-end)](https://github.com/RafaBran/api-common-laecUNIALFA)  
-## [UI (Front-end)](https://github.com/RafaBran/UI-laecUNIALFA)
----
-
-Atualmente me dedicando ao aprendizado contínuo e sempre buscando novos desafios e oportunidades de crescimento.
-
-Fique à vontade para entrar em contato e discutir sobre tecnologia, projetos ou qualquer outra coisa!
-
----
-
-
+[branhub.vercel.app](https://branhub.vercel.app) · [X @BrandRFL](https://x.com/BrandRFL)
