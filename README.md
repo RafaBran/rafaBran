@@ -17,6 +17,8 @@ Biologia e em Análise e Desenvolvimento de Sistemas pela UNIALFA, e moro em Goi
 
 <br><br>
 
+<img src="https://raw.githubusercontent.com/RafaBran/rafaBran/output/atividade.svg" alt="Atividade no GitHub nos últimos 12 meses" width="100%">
+
 <br>
 
 <p align="center">
